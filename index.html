@@ -259,6 +259,13 @@
                 }
             }
 
+            var memo_sun = "2026-01-01^2026-02-16^2026-02-17^2026-02-18^2026-03-02^2026-05-05^2026-05-06^2026-08-15^2026-08-17^2026-09-24^2026-09-25^2026-09-26^2026-10-03^2026-10-05^2026-10-09^2026-12-25^" +
+            "2027-01-01^2027-02-06^2027-02-08^2027-02-09^2027-03-01^2027-05-05^2027-05-13^2027-08-16^2027-09-14^2027-09-15^2027-09-16^2027-10-04^2027-10-09^2027-10-11^2027-12-25^" +
+            "2028-01-01^2028-01-26^2028-01-27^2028-01-28^2028-03-01^2028-05-02^2028-05-05^2028-06-06^2028-08-15^2028-10-02^2028-10-03^2028-10-04^2028-10-09^2028-12-25^" +
+            "2029-01-01^2029-02-12^2029-02-13^2029-02-14^2029-03-01^2029-05-05^2029-05-07^2029-06-06^2029-08-15^2029-09-21^2029-09-22^2029-09-24^2029-10-03^2029-10-09^2029-12-25^" +
+            "2030-01-01^2030-02-02^2030-02-04^2030-02-05^2030-03-01^2030-05-06^2030-05-09^2030-06-06^2030-08-15^2030-09-11^2030-09-12^2030-09-13^2030-10-03^2030-10-09^2030-12-25^";
+
+
             var target = document.querySelectorAll('.btn_open');
             var btnPopClose = document.querySelectorAll('.pop_wrap .btn_close');
             var targetID;
@@ -338,7 +345,7 @@
             }
 
 
-            let socket = new WebSocket("ws://rillgame.iptime.org:55501");
+            //let socket = new WebSocket("ws://rillgame.iptime.org:55501");
             //var month = document.getElementById("month1");
             var currentDate = new Date();
             var id = "";
@@ -704,11 +711,7 @@
                 var serch_phon = document.getElementById("num_filld").innerHTML;
 
                 var data = "Serch_phon*" + serch_phon;
-                if (socket.OPEN == true) {
-                    socket.send(id + data);
-                } else {
-                    socket = new WebSocket("ws://rillgame.iptime.org:55584");
-                }
+                
 
             }
 
@@ -816,22 +819,16 @@
                     }
                 }
             }
+            //요금 계산...
             function cash_call() {
-                //if (socket.readyState == socket.OPEN) {
-                document.getElementById("cash").innerHTML = "<style='width: 450px; height: 100px;font-size: 44px;'font color='red'>오류가 있습니다.</font><br>";
-                document.getElementById("title2").innerHTML = "<style='width: 450px; height: 100px;font-size: 44px;'font color='red'>오류가 있습니다.</font><br>";
-                cash_box.innerHTML = "";
-                document.getElementById("pop_info_3").style.display = 'block';
-                    var data = in_yer + "/" + in_mon + "/" + in_day + "/" + in_time + "*" + out_yer + "/" + out_mon + "/" + out_day + "/" + out_time;
-                //socket = new WebSocket("ws://rillgame.iptime.org:55501");
-                socket.send(id + data);
-                    //alert("데이터를 서버에 전송해봅시다.");
-                //} else {
-                //    alert("연결이 해제되었습니다..");
-                //    location.reload(true);
-                    //socket = new WebSocket("ws://rillgame.iptime.org:55501");
-                //}
-                //console.log("소켓 상태 : " + socket.OPEN.toString());
+                
+                //document.getElementById("cash").innerHTML = "<style='width: 450px; height: 100px;font-size: 44px;'font color='red'>오류가 있습니다.</font><br>";
+                //document.getElementById("title2").innerHTML = "<style='width: 450px; height: 100px;font-size: 44px;'font color='red'>오류가 있습니다.</font><br>";
+                //cash_box.innerHTML = "";
+                //document.getElementById("pop_info_3").style.display = 'block';
+                var data = in_yer + "/" + in_mon + "/" + in_day + "/" + in_time + "*" + out_yer + "/" + out_mon + "/" + out_day + "/" + out_time;
+                
+                //socket.send(id + data);
             }
             //예약 보내기...
             function cash_call_send() {
@@ -845,11 +842,7 @@
                     document.getElementById("cashcallredy_text").innerHTML = "<style='width: 450px; height: 100px;font-size: 44px;'font color='red'>잠시만 기다려 주세요.<br> 예약 접수 중입니다!!.</font><br>";
 
                     var data = in_yer + "/" + in_mon + "/" + in_day + "/" + in_time + "*" + out_yer + "/" + out_mon + "/" + out_day + "/" + out_time + "*" + car_no + "/" + phon_no + "/" + memo_cash;
-                    if (socket.OPEN == true) {
-                        socket.send(id + data);
-                    } else {
-                        //socket = new WebSocket("ws://rillgame.iptime.org:55501");
-                    }
+                    
                 }
             }
             function cash_call_close(a) {
@@ -859,83 +852,6 @@
             //printMonth();
             //printCalendar();
 
-
-            socket.onopen = function (e) {
-                var a = "User_" + Math.floor(Math.random() * 99999) + "#";
-                id = "User_in#" + a;
-                socket.send(id);
-                id = a + "Server#";
-            };
-
-            socket.onmessage = function (event) {
-                console.log(`[message] 서버로부터 전송받은 데이터: ${event.data}`);
-                const tt = event.data.toString();
-                if (tt.indexOf('#') != -1) {
-                    var te = event.data.toString().split('#');
-                    if (te[2] == "cash") {
-                        document.getElementById("pop_info_3").style.display = 'block';
-                        //document.getElementById("cash_view").innerHTML = te[3].toString();
-                        document.getElementById("cash").innerHTML = te[3].toString();
-                        memo_cash = te[3].toString();
-                        cash_box_call();
-                    }
-                    if (te[2] == "cash_ok") {
-                        var tet = te[3].split('/');
-                        document.getElementById("cashcallredy_text").innerHTML = "<style='width: 750px; height: 100px;font-size: 44px;'font color='red'>예약 접수  완료 되었습니다!!.</font><br>" +
-                            "전화 번호 : " + tet[1] + "<br>차량 번호 : " + tet[0] + "<br>" +
-                            "입차 일시 : " + tet[2] + "년 " + tet[3] + "월 " + tet[4] + "일 " + tet[5] + "시<br>" +
-                            "출차 일시 : " + tet[6] + "년 " + tet[7] + "월 " + tet[8] + "일 " + tet[9] + "시<br>" +
-                            tet[10] + "<br>";
-
-                    }
-                    if (te[2] == "cash_no") {
-                        document.getElementById("cashcallredy_text").innerHTML = "<style='width: 750px; height: 100px;font-size: 44px;'font color='red'>현재 주자장이 혼잡 하오니<br> 051-971-7709 문의 바랍니다.</font><br>";
-
-                    }
-                    if (te[2] == "cash_time_over") {
-                        document.getElementById("cashcallredy_text").innerHTML = "<style='width: 750px; height: 100px;font-size: 44px;'font color='red'>밤 9시 이후 도착은.<br> 051-971-7709 문의 바랍니다.</font><br>";
-
-                    }
-                    if (te[2] == "cash_okErr") {
-                        document.getElementById("cashcallredy_text").innerHTML = "<style='width: 750px; height: 100px;font-size: 44px;'font color='red'>예약 접수<br> 완료된 전화번호 입니다!!.</font><br>";
-
-                    }
-                    if (te[2] == "Serch_no") {
-                        document.getElementById("cashcallredy_text").innerHTML = "<style='width: 750px; height: 100px;font-size: 44px;'font color='red'>입력하신 전화번호로<br> 예약이 없습니다..</font><br>";
-
-                    }
-                    if (te[2] == "Serch_ok") {
-                        var te1 = te[4].split('-');
-                        var te2 = te[5].split('-');
-                        document.getElementById("cashcallredy_text").innerHTML = "<style='width: 750px; height: 100px;font-size: 44px;'font color='red'>차량번호 : " + te[3] + "<br>입차 일시 : " + te1[0] + "년 " + te1[1] + "월 " + te1[2] + "일 " + te1[3] + "시" +
-                            "<br>출차 일시 : " + te2[0] + "년 " + te2[1] + "월 " + te2[2] + "일 " + te2[3] + "시<br>" + te[6] +
-                            "<br>예약 접수되어 있습니다.</font > <br>";
-
-                    }
-                    if (te[2] == "Test_call") {
-                        //document.getElementById("cashcallredy_text").innerHTML = "<style='width: 750px; height: 100px;font-size: 44px;'font color='red'>입력하신 전화번호로<br> 예약이 없습니다..</font><br>";
-                        socket.send(id + "Test_Ok");
-                    }
-                }
-            };
-
-            socket.onclose = function (event) {
-                socket.send(id + "종려.");
-                if (event.wasClean) {
-                    alert(`[close] 커넥션이 정상적으로 종료되었습니다(code=${event.code} reason=${event.reason})`);
-                    alert('종료 합니다.');
-                }
-                else {
-                    // 예시: 프로세스가 죽거나 네트워크에 장애가 있는 경우 // event.code가 1006이 됩니다.
-                    alert('오류가 있습니다.');
-                    location.reload(true);
-                }
-
-            };
-
-            socket.onerror = function (error) {
-                alert(`[error]`);
-            };
             /*
             startClock();
             function startClock() {
@@ -953,6 +869,92 @@
 
         </script>
 
+
+  <h2>주차장 예약</h2>
+
+  <input id="name" placeholder="이름"><br>
+  <input id="phone" placeholder="전화번호"><br>
+  <input id="carNumber" placeholder="차량번호"><br>
+  <input id="checkIn" type="datetime-local"><br>
+  <input id="checkOut" type="datetime-local"><br>
+
+  <button onclick="saveReservation()">예약하기</button>
+
+  <hr>
+
+  <h3>예약 목록</h3>
+  <div id="reservationList"></div>
+
+
+        // 파이어 베이스 제어.....예약...
+        <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBLnisp16OuLsNF32jAoc2S6dz3eLNEcsY",
+  authDomain: "paking-data.firebaseapp.com",
+  databaseURL: "https://paking-data-default-rtdb.firebaseio.com",
+  projectId: "paking-data",
+  storageBucket: "paking-data.firebasestorage.app",
+  messagingSenderId: "335256389912",
+  appId: "1:335256389912:web:012f45d4d460f84dd2766d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// 예약 저장 (전화번호를 ID로 사용)
+window.saveReservation = function() {
+
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value.replace(/[^0-9]/g, "");
+  const carNumber = document.getElementById("carNumber").value;
+  const checkIn = document.getElementById("checkIn").value;
+  const checkOut = document.getElementById("checkOut").value;
+
+  if (!phone) {
+    alert("전화번호 입력하세요");
+    return;
+  }
+
+  set(ref(db, "reservations/" + phone), {
+    name,
+    phone,
+    carNumber,
+    checkIn,
+    checkOut,
+    createdAt: Date.now()
+  });
+
+  alert("예약 완료!");
+}
+
+// 실시간 목록 표시
+const reservationRef = ref(db, "reservations");
+
+onValue(reservationRef, (snapshot) => {
+  const data = snapshot.val();
+  const listDiv = document.getElementById("reservationList");
+  listDiv.innerHTML = "";
+
+  if (!data) return;
+
+  for (let key in data) {
+    const r = data[key];
+
+    listDiv.innerHTML += `
+      <div style="border:1px solid #ccc; margin:5px; padding:5px;">
+        이름: ${r.name}<br>
+        전화: ${r.phone}<br>
+        차량: ${r.carNumber}<br>
+        입차: ${r.checkIn}<br>
+        출차: ${r.checkOut}
+      </div>
+    `;
+  }
+});
+</script>
     </body>
 
 </html>
